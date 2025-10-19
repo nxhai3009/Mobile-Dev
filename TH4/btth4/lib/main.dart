@@ -1,6 +1,9 @@
+// lib/main.dart
 import 'package:flutter/material.dart';
-import 'screens/survey_station_screen.dart';
-import 'screens/data_map_screen.dart';
+import 'screens/survey_station.dart';
+import 'screens/data_map.dart';
+import 'services/sensor_service.dart';
+import 'services/storage_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,59 +11,53 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
+    final sensorService = SensorService();
+    final storageService = StorageService();
+
     return MaterialApp(
-      title: 'Trạm Khảo sát',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
+      debugShowCheckedModeBanner: false,
+      title: 'Schoolyard Heatmap',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: HomeContainer(
+        sensorService: sensorService,
+        storageService: storageService,
       ),
-      home: const MainNavigationScreen(),
     );
   }
 }
 
-class MainNavigationScreen extends StatefulWidget {
-  const MainNavigationScreen({super.key});
+class HomeContainer extends StatefulWidget {
+  final SensorService sensorService;
+  final StorageService storageService;
+  const HomeContainer({
+    Key? key,
+    required this.sensorService,
+    required this.storageService,
+  }) : super(key: key);
 
   @override
-  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
+  State<HomeContainer> createState() => _HomeContainerState();
 }
 
-class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _currentIndex = 0;
-
-  final List<Widget> _screens = [
-    const SurveyStationScreen(),
-    const DataMapScreen(),
-  ];
-
+class _HomeContainerState extends State<HomeContainer> {
+  int _index = 0;
   @override
   Widget build(BuildContext context) {
+    final screens = [
+      SurveyStation(sensorService: widget.sensorService, storageService: widget.storageService),
+      DataMapScreen(storageService: widget.storageService),
+    ];
     return Scaffold(
-      body: _screens[_currentIndex],
+      body: screens[_index],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+        currentIndex: _index,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.sensors),
-            label: 'Trạm Khảo sát',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: 'Bản đồ Dữ liệu',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.sensors), label: 'Trạm Khảo sát'),
+          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Bản đồ Dữ liệu'),
         ],
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.blue[600],
-        unselectedItemColor: Colors.grey[600],
+        onTap: (i) => setState(() => _index = i),
       ),
     );
   }

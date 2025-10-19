@@ -1,5 +1,5 @@
-name: btth4
-description: "A new Flutter project."
+name: schoolyard_heatmap
+description: Bản đồ nhiệt sân trường - thu thập cảm biến
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -30,13 +30,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sensors_plus: ^4.0.2
-  geolocator: ^11.0.0
-  path_provider: ^2.1.2
-  permission_handler: ^11.3.1
-  light_sensor: ^3.0.1
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
+  sensors_plus: ^7.0.0
+  light: ^4.1.0
+  location: ^8.0.1
+  path_provider: ^2.0.14
+  permission_handler: ^12.0.1
+  cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:
